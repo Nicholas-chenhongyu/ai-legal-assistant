@@ -1,0 +1,10 @@
+.git
+.gitignore
+SETUP_DATABASE.sql
+migrations
+README.md
+node_modules
+.env.example
+.next
+.eslintrc.json
+eslint.config.mjs
