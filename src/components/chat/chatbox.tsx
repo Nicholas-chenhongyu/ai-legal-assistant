@@ -22,7 +22,7 @@ interface Message {
 interface ChatBoxProps {
 	caseContext: string;
 	caseId: number;
-	variant?: "bottom" | "sidebar"; // bottom: 底部（原样式），sidebar: 右侧侧边栏
+	variant?: "bottom" | "sidebar" | "fixed-right"; // bottom: 底部（原样式），sidebar: 右侧侧边栏（可折叠），fixed-right: 右侧固定（不折叠）
 }
 
 export function ChatBox({
@@ -373,6 +373,80 @@ export function ChatBox({
 						</div>
 					</DrawerContent>
 				</Drawer>
+			)}
+
+			{variant === "fixed-right" && (
+				<div className="w-96 border-l bg-white flex flex-col shrink-0 overflow-hidden">
+					<div className="border-b p-4 bg-card shrink-0">
+						<h2 className="font-semibold text-lg">AI 法律助手</h2>
+					</div>
+
+					{error && (
+						<div className="px-4 py-3 bg-destructive/10 border-b border-destructive/20 shrink-0">
+							<p className="text-sm text-destructive">⚠️ {error}</p>
+						</div>
+					)}
+
+					<div className="flex-1 overflow-y-auto p-4 space-y-4 bg-card">
+						{messages.length === 0 && (
+							<div className="flex items-center justify-center h-full text-muted-foreground text-sm text-center">
+								<p>你好！我是 AI 法律助手。请提出你对本案件的问题。</p>
+							</div>
+						)}
+
+						{messages.map((message) => (
+							<div
+								key={message.id}
+								className={`flex ${
+									message.role === "user" ? "justify-end" : "justify-start"
+								}`}
+							>
+								<div
+									className={`max-w-xs px-4 py-2 rounded-lg text-sm ${
+										message.role === "user"
+											? "bg-primary text-primary-foreground rounded-br-none"
+											: "bg-secondary text-secondary-foreground rounded-bl-none"
+									}`}
+								>
+									<p className="whitespace-pre-wrap">{message.content}</p>
+								</div>
+							</div>
+						))}
+
+						{isLoading && (
+							<div className="flex justify-start">
+								<div className="bg-secondary text-secondary-foreground px-4 py-2 rounded-lg rounded-bl-none">
+									<Loader2 className="h-4 w-4 animate-spin" />
+								</div>
+							</div>
+						)}
+						<div ref={messagesEndRef} />
+					</div>
+
+					<div className="border-t p-3 bg-card shrink-0">
+						<form onSubmit={handleSubmit} className="flex gap-2">
+							<Input
+								value={input}
+								onChange={(e) => setInput(e.target.value)}
+								placeholder="输入问题..."
+								disabled={isLoading}
+								className="flex-1 text-sm h-9"
+							/>
+							<Button
+								type="submit"
+								size="sm"
+								disabled={isLoading || !input.trim()}
+								className="flex items-center gap-1"
+							>
+								{isLoading ? (
+									<Loader2 className="h-4 w-4 animate-spin" />
+								) : (
+									<Send className="h-4 w-4" />
+								)}
+							</Button>
+						</form>
+					</div>
+				</div>
 			)}
 		</>
 	);

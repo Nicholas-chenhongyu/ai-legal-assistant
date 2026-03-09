@@ -187,10 +187,10 @@ export default function CaseDetailPage({
 	}
 
 	return (
-		<div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100">
+		<div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 flex">
 			{/* 左侧主要内容区域 */}
-			<div className="flex-1 py-8 px-4 sm:px-6 lg:px-8 pr-96">
-				<div className="mx-auto max-w-6xl space-y-6">
+			<div className="flex-1 py-8 px-4 sm:px-6 lg:px-8 overflow-y-auto">
+				<div className="mx-auto max-w-4xl space-y-6">
 					{/* 标题和操作按钮 */}
 					<div className="flex items-start justify-between">
 						<div>
@@ -294,7 +294,7 @@ export default function CaseDetailPage({
 			<ChatBox
 				caseContext={`案件标题: ${caseData.title}\n案件描述: ${caseData.description || "无"}`}
 				caseId={parseInt(id)}
-				variant="sidebar"
+				variant="fixed-right"
 			/>
 		</div>
 	);
